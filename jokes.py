@@ -11,7 +11,13 @@ def get_jokes(category: str) -> dict:
     Return:
         A dictionary representation of the function
     """
-    url = "https://v2.jokeapi.dev/joke/" + category
+    # Parameters to blacklist
+    blacklist = "?blacklistFlags=nsfw,racist,sexist,explicit"
+
+    # The base url
+    url = "https://v2.jokeapi.dev/joke/" + category + blacklist
+
+    # The response
     response = requests.get(url)
 
     return response.json()
