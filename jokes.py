@@ -17,6 +17,8 @@ def get_jokes(category: str) -> dict:
     # The base url
     url = "https://v2.jokeapi.dev/joke/" + category + blacklist
 
+    # Need to fix the API url
+
     # The response
     response = requests.get(url)
 
