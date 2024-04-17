@@ -3,7 +3,7 @@ import requests
 def get_jokes(category: str) -> dict:
     """
     Description:
-        This function fethces Jokes based on their provided category
+        This function fetches Jokes based on their provided category
 
     Args:
         category: The category of the joke in string form
@@ -11,8 +11,7 @@ def get_jokes(category: str) -> dict:
     Return:
         A dictionary representation of the function
     """
-    url = "https://v2.jokeapi.dev/joke/Any?safe-mode"
-    params = {"category": category}
-    response = requests.get(url, params)
+    url = "https://v2.jokeapi.dev/joke/" + category
+    response = requests.get(url)
 
     return response.json()
