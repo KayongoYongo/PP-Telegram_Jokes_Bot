@@ -1,6 +1,6 @@
 import requests
 
-def get_jokes(category: str) -> dict:
+def get_jokes(category: str, type: str) -> dict:
     """
     Description:
         This function fetches Jokes based on their provided category
@@ -15,9 +15,7 @@ def get_jokes(category: str) -> dict:
     blacklist = "?blacklistFlags=nsfw,racist,sexist,explicit"
 
     # The base url
-    url = "https://v2.jokeapi.dev/joke/" + category + blacklist
-
-    # Need to fix the API url to accept a specific category
+    url = f"https://v2.jokeapi.dev/joke/{category}{blacklist}&type={type}"
 
     # The response
     response = requests.get(url)
