@@ -22,12 +22,12 @@ def send_welcome(message):
         message: This will be the text that will trigger the function
     """
     # This messsage loads when the bot is started
-    bot.reply_to(message, "Hello! Wanna hear a Joke?")
+    bot.reply_to(message, f"Wassup! Wanna hear a Joke?\nType: /category then /type to continue")
 
 @bot.message_handler(commands=['category'])
 def category_handler(message):
     """
-    This function will handle the sign of the horoscopes
+    This function will handle the category of the jokes
 
     Args:
         message: This will be the text that will trigger the function
@@ -39,23 +39,49 @@ def category_handler(message):
     sent_msg = bot.send_message(message.chat.id, text, parse_mode="Markdown")
 
     # review the syntax of the register_next_step_handler
-    bot.register_next_step_handler(sent_msg, fetch_jokes)
+    bot.register_next_step_handler(sent_msg, type_handler)
 
-def fetch_jokes(message):
+def type_handler(message):
     """
-    This function will handle the day of the horoscopes
+    This function will handle the type(twopart or single)
+
+    Args:
+        message: This will be the text that will trigger the function
+    """
+    category = message.text
+        
+    text = "What type do you like?\nChoose one: *single* or *twopart*."
+
+    # sends a message from the bot to the chat
+    sent_msg = bot.send_message(message.chat.id, text, parse_mode="Markdown")
+
+    # review the syntax of the register_next_step_handler
+    bot.register_next_step_handler(sent_msg, fetch_jokes, category.capitalize())
+
+def fetch_jokes(message, category):
+    """
+    This function will handle the fetching of the jokes
 
     Args:
         category: This will be the text that will trigger the function
     """
-    category = message.text
-    data = get_jokes(category)
-    print(data)
-    setup = data["setup"]
-    delivery = data["delivery"]
-    joke_message = f"*Setup:* {setup}\n*Delivery:* {delivery}"
-    bot.send_message(message.chat.id, "Here's your joke")
-    bot.send_message(message.chat.id, joke_message, parse_mode="Markdown")
+    type = message.text
+    data = get_jokes(category, type)
+
+    if type == 'single':
+        joke = data["joke"]
+        print(joke)
+        joke_message = f"{joke}"
+        bot.send_message(message.chat.id, "Here's the joke")
+        bot.send_message(message.chat.id, joke_message, parse_mode="Markdown")
+    else:
+        setup = data["setup"]
+        delivery = data["delivery"]
+        print(setup)
+        print(delivery)
+        joke_message = f"*{setup}*\n\n\n{delivery}"
+        bot.send_message(message.chat.id, "Here's the joke")
+        bot.send_message(message.chat.id, joke_message, parse_mode="Markdown")
 
 # starts the bot and continuously polls for new messages from users.
 bot.infinity_polling()
